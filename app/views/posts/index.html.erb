@@ -1,0 +1,41 @@
+<p>Xin chào: <%= Current.user.email_address %>, Id: <%= Current.user.id %></p>
+<%= button_to "Đăng xuất", session_path, method: :delete if authenticated? %>
+
+<h1>Danh sách bài viết của <%= @user.email_address %> <%= link_to "Quay lại", users_path %> </h1>
+<h2>Tổng số bài viết <%= @user.posts.count %> </h2>
+<h2>Số bài viết hiển thị <%= @posts.count %></h2>
+
+<p>Người khác chỉ hiện thị post công khai</p>
+
+<table border="1" cellspacing="0" cellpadding="6">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Tiêu đề</th>
+    <th>Người đăng</th>
+    <th>Trạng thái</th>
+    <th>Xem</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @posts.each do |post| %>
+    <tr>
+      <td><%= post.id %></td>
+      <td><%= post.title %></td>
+      <td><%= @user.email_address %></td>
+      <td>
+        <% if post.visibility == 0 %>
+          Công khai
+        <% else %>
+          Riêng tư
+        <% end %>
+      </td>
+      <td>
+        <%= link_to "Xem chi tiết", user_post_path(@user, post) %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Tạo mới", new_user_post_path %>

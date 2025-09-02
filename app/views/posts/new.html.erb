@@ -1,0 +1,39 @@
+<h1>Tạo bài viết mới</h1>
+
+<%= form_with model: [Current.user, @post], local: true, data: {turbo: false} do |form| %>
+  <% if @post.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
+      <ul>
+        <% @post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :title, "Tiêu đề:" %>
+    <%= form.text_field :title, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :content, "Nội dung:" %>
+    <%= form.text_area :content, required: true, rows: 10, cols: 50 %>
+  </div>
+
+  <div>
+    <%= form.label :visibility, "Trạng thái:" %>
+    <%= form.select :visibility,
+                    options_for_select([
+                                         ['Công khai', 0],
+                                         ['Riêng tư', 1]
+                                       ], @post.visibility) %>
+  </div>
+
+  <div>
+    <%= form.submit "Tạo bài viết" %>
+  </div>
+<% end %>
+
+<%= link_to "Quay lại", user_posts_path(Current.user) %>

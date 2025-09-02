@@ -1,0 +1,29 @@
+<p>Xin chào: <%= Current.user.email_address %>, Id: <%= Current.user.id %></p>
+<%= button_to "Đăng xuất", session_path, method: :delete if authenticated? %>
+
+<h1>Danh sách bài viết của bạn <%= link_to "Xem", user_posts_path(Current.user) %> </h1>
+
+<h1>Khám phá các blogger khác</h1>
+
+<table border="1" cellspacing="0" cellpadding="6">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Email</th>
+    <th>Số bài viết</th>
+    <th>Xem bài viết</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @users.each do |user| %>
+    <tr>
+      <td><%= user.id %></td>
+      <td><%= user.email_address %></td>
+      <td><%= user.posts.count %></td>
+      <td>
+        <%= link_to "Xem", user_posts_path(user) %>
+      </td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

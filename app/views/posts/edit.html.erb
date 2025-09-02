@@ -1,0 +1,474 @@
+<div class="edit-post-container">
+  <div class="edit-post-card">
+    <div class="edit-header">
+      <h1>Chỉnh sửa bài viết</h1>
+      <p class="edit-subtitle">Cập nhật thông tin bài viết của bạn</p>
+    </div>
+
+    <%= form_with model: [@user, @post], local: true, data: {turbo: false} do |form| %>
+      <% if @post.errors.any? %>
+        <div class="error-messages">
+          <div class="error-header">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h3><%= pluralize(@post.errors.count, "lỗi") %> cần sửa:</h3>
+          </div>
+          <ul class="error-list">
+            <% @post.errors.each do |error| %>
+              <li><%= error.full_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :title, "Tiêu đề bài viết", class: "form-label" %>
+        <%= form.text_field :title,
+                            value: @post.title,
+                            class: "form-input title-input",
+                            placeholder: "Nhập tiêu đề bài viết...",
+                            required: true %>
+        <div class="input-hint">Tiêu đề ngắn gọn, dễ hiểu</div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :content, "Nội dung bài viết", class: "form-label" %>
+        <%= form.text_area :content,
+                           value: @post.content,
+                           class: "form-input content-input",
+                           placeholder: "Viết nội dung bài viết của bạn ở đây...",
+                           rows: 12,
+                           required: true %>
+        <div class="input-hint">Nội dung chi tiết, có thể sử dụng HTML</div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :visibility, "Trạng thái hiển thị", class: "form-label" %>
+        <div class="visibility-options">
+          <%= form.radio_button :visibility, 0,
+                                checked: @post.visibility == 0,
+                                class: "visibility-radio" %>
+          <%= form.label :visibility_0, class: "visibility-label public" do %>
+            <i class="fas fa-globe"></i>
+            <div class="visibility-text">
+              <span class="visibility-title">Công khai</span>
+              <span class="visibility-desc">Mọi người đều có thể xem</span>
+            </div>
+          <% end %>
+
+          <%= form.radio_button :visibility, 1,
+                                checked: @post.visibility == 1,
+                                class: "visibility-radio" %>
+          <%= form.label :visibility_1, class: "visibility-label private" do %>
+            <i class="fas fa-lock"></i>
+            <div class="visibility-text">
+              <span class="visibility-title">Riêng tư</span>
+              <span class="visibility-desc">Chỉ bạn mới có thể xem</span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Cập nhật bài viết", class: "btn btn-primary update-btn" %>
+        <%= link_to "Hủy bỏ", user_post_path(@user, @post), class: "btn btn-secondary cancel-btn" %>
+      </div>
+    <% end %>
+
+    <div class="post-preview">
+      <h3>Xem trước bài viết</h3>
+      <div class="preview-card">
+        <div class="preview-header">
+          <div class="preview-user">
+            <img src="https://via.placeholder.com/40x40/007bff/ffffff?text=<%= @user.email_address.first.upcase %>" alt="Avatar" class="preview-avatar">
+            <div class="preview-user-info">
+              <span class="preview-username"><%= @user.email_address %></span>
+              <span class="preview-time">Vừa xong</span>
+            </div>
+          </div>
+          <div class="preview-privacy" id="preview-privacy">
+            <!-- Sẽ được cập nhật bằng JavaScript -->
+          </div>
+        </div>
+        <div class="preview-content">
+          <h4 id="preview-title"><%= @post.title %></h4>
+          <p id="preview-content"><%= @post.content %></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+    .edit-post-container {
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 0 20px;
+    }
+
+    .edit-post-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+
+    .edit-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .edit-header h1 {
+        margin: 0 0 10px 0;
+        font-size: 28px;
+        font-weight: 600;
+    }
+
+    .edit-subtitle {
+        margin: 0;
+        opacity: 0.9;
+        font-size: 16px;
+    }
+
+    .error-messages {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 16px;
+        margin: 20px;
+    }
+
+    .error-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #dc2626;
+        margin-bottom: 12px;
+    }
+
+    .error-header h3 {
+        margin: 0;
+        font-size: 16px;
+    }
+
+    .error-list {
+        margin: 0;
+        padding-left: 20px;
+        color: #dc2626;
+    }
+
+    .form-group {
+        padding: 20px;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .form-group:last-of-type {
+        border-bottom: none;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+        font-size: 16px;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        box-sizing: border-box;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .title-input {
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .content-input {
+        resize: vertical;
+        min-height: 200px;
+        font-family: inherit;
+        line-height: 1.6;
+    }
+
+    .input-hint {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #6b7280;
+        font-style: italic;
+    }
+
+    .visibility-options {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .visibility-radio {
+        display: none;
+    }
+
+    .visibility-label {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .visibility-label:hover {
+        border-color: #3b82f6;
+        background: #f8fafc;
+    }
+
+    .visibility-radio:checked + .visibility-label {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    .visibility-label.public {
+        border-left: 4px solid #10b981;
+    }
+
+    .visibility-label.private {
+        border-left: 4px solid #f59e0b;
+    }
+
+    .visibility-label i {
+        font-size: 20px;
+        width: 24px;
+        text-align: center;
+    }
+
+    .visibility-label.public i {
+        color: #10b981;
+    }
+
+    .visibility-label.private i {
+        color: #f59e0b;
+    }
+
+    .visibility-text {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .visibility-title {
+        font-weight: 600;
+        color: #111827;
+        font-size: 14px;
+    }
+
+    .visibility-desc {
+        color: #6b7280;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 12px;
+        padding: 20px;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-primary {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background: #6b7280;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background: #4b5563;
+    }
+
+    .update-btn {
+        flex: 1;
+        justify-content: center;
+    }
+
+    .post-preview {
+        padding: 20px;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .post-preview h3 {
+        margin: 0 0 16px 0;
+        color: #374151;
+        font-size: 18px;
+    }
+
+    .preview-card {
+        background: white;
+        border-radius: 12px;
+        padding: 16px;
+        border: 1px solid #e5e7eb;
+    }
+
+    .preview-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .preview-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .preview-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+
+    .preview-user-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .preview-username {
+        font-weight: 600;
+        color: #111827;
+        font-size: 14px;
+    }
+
+    .preview-time {
+        color: #6b7280;
+        font-size: 12px;
+    }
+
+    .preview-privacy {
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 12px;
+    }
+
+    .preview-privacy.public {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .preview-privacy.private {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .preview-content h4 {
+        margin: 0 0 8px 0;
+        color: #111827;
+        font-size: 16px;
+    }
+
+    .preview-content p {
+        margin: 0;
+        color: #374151;
+        line-height: 1.6;
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .edit-post-container {
+            padding: 0 10px;
+        }
+
+        .edit-header {
+            padding: 20px;
+        }
+
+        .edit-header h1 {
+            font-size: 24px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .visibility-label {
+            padding: 12px;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const titleInput = document.querySelector('.title-input');
+        const contentInput = document.querySelector('.content-input');
+        const visibilityRadios = document.querySelectorAll('.visibility-radio');
+
+        const previewTitle = document.getElementById('preview-title');
+        const previewContent = document.getElementById('preview-content');
+        const previewPrivacy = document.getElementById('preview-privacy');
+
+        // Cập nhật preview title
+        titleInput.addEventListener('input', function() {
+            previewTitle.textContent = this.value || 'Tiêu đề bài viết';
+        });
+
+        // Cập nhật preview content
+        contentInput.addEventListener('input', function() {
+            previewContent.textContent = this.value || 'Nội dung bài viết';
+        });
+
+        // Cập nhật preview privacy
+        visibilityRadios.forEach(radio => {
+            radio.addEventListener('change', function() {
+                if (this.value === '0') {
+                    previewPrivacy.textContent = '🌐 Công khai';
+                    previewPrivacy.className = 'preview-privacy public';
+                } else {
+                    previewPrivacy.textContent = '�� Riêng tư';
+                    previewPrivacy.className = 'preview-privacy private';
+                }
+            });
+        });
+
+        // Khởi tạo preview privacy ban đầu
+        const checkedRadio = document.querySelector('.visibility-radio:checked');
+        if (checkedRadio) {
+            checkedRadio.dispatchEvent(new Event('change'));
+        }
+    });
+</script>
