@@ -1,2 +1,16 @@
-<h1>Comments#index</h1>
-<p>Find me in app/views/comments/index.html.erb</p>
+<div>
+  <%= link_to "Tạo bình luận mới", new_user_post_comment_path(@user, @post) %>
+  <%= link_to "Quay lai Post", user_post_path(@user, @post) %>
+</div>
+
+<h3>Bình luận</h3>
+<% if @comments.present? %>
+  <ul class="comment-tree">
+    <%= render partial: "comment",
+               collection: @comments,
+               as: :comment,
+               locals: { user: @user, post: @post, level: 0 } %>
+  </ul>
+<% else %>
+  <p>Chưa có bình luận nào.</p>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Tạo bình luận mới</h1>
+
+<%= form_with model: [@user, @post, @comment], local: true do |form| %>
+  <%= form.hidden_field :parent_id %>
+  <% if @comment.errors.any? %>
+    <div class="error-messages">
+      <h3><%= pluralize(@comment.errors.count, "lỗi") %> cần sửa:</h3>
+      <ul>
+        <% @comment.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form.hidden_field :parent_id, value: @comment.parent_id %>
+
+  <div class="form-group">
+    <%= form.label :content, "Nội dung bình luận:" %>
+    <%= form.text_area :content, rows: 4, cols: 50, required: true, class: "form-control" %>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit "Tạo bình luận", class: "btn btn-primary" %>
+    <%= link_to "Hủy", user_post_comments_path(@user, @post), class: "btn btn-secondary" %>
+  </div>
+<% end %>

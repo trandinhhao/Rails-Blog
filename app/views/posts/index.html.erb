@@ -38,4 +38,5 @@
   </tbody>
 </table>
 
-<%= link_to "Tạo mới", new_user_post_path %>
+<%= link_to "Tạo mới", new_user_post_path if @user == Current.user %>
+<%= link_to "Quay lai", users_path %>
