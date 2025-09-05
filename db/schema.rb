@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_31_151844) do
+ActiveRecord::Schema[8.0].define(version: 2025_09_04_091950) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_31_151844) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_comments_on_post_id"
     t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
+  create_table "post_follows", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_follows_on_post_id"
+    t.index ["user_id"], name: "index_post_follows_on_user_id"
+  end
+
+  create_table "post_ratings", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "post_id", null: false
+    t.integer "star"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["post_id"], name: "index_post_ratings_on_post_id"
+    t.index ["user_id"], name: "index_post_ratings_on_user_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -54,6 +73,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_31_151844) do
 
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
+  add_foreign_key "post_follows", "posts"
+  add_foreign_key "post_follows", "users"
+  add_foreign_key "post_ratings", "posts"
+  add_foreign_key "post_ratings", "users"
   add_foreign_key "posts", "users"
   add_foreign_key "sessions", "users"
 end
