@@ -7,8 +7,8 @@ Rails.application.routes.draw do
 
   resources :users do
     resources :posts do
-      resources :post_ratings, only: [:create, :update, :destroy]
-      resources :post_follows, only: [:create, :destroy]
+      resources :post_ratings
+      resources :post_follows, only: [:new, :create, :destroy]
     end
   end
 
@@ -17,8 +17,7 @@ Rails.application.routes.draw do
   end
 
   resources :posts, only: [] do
-    resources :post_ratings, only: [:index]
-    resources :comments, only: [:index,:create]
+    resources :comments
   end
 
   resources :comments, only: [:destroy]

@@ -1,12 +1,13 @@
 <p>Xin chào: <%= Current.user.email_address %>, Id: <%= Current.user.id %></p>
 <%= button_to "Đăng xuất", session_path, method: :delete if authenticated? %>
 
-<h1>Danh sách bài viết của <%= @user.email_address %> <%= link_to "Quay lại", users_path %> </h1>
+<h1>Danh sách bài viết của <%= @user.email_address %> </h1>
 <h2>Tổng số bài viết <%= @user.posts.count %> </h2>
 <h2>Số bài viết hiển thị <%= @posts.count %></h2>
 
-<p>Người khác chỉ hiện thị post công khai</p>
+<p>Người khác chỉ hiện thị post công khai!!!</p>
 
+<%= link_to "Tạo mới", new_user_post_path if @user == Current.user %>
 <table border="1" cellspacing="0" cellpadding="6">
   <thead>
   <tr>
@@ -38,5 +39,4 @@
   </tbody>
 </table>
 
-<%= link_to "Tạo mới", new_user_post_path if @user == Current.user %>
 <%= link_to "Quay lai", users_path %>

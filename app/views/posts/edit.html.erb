@@ -1,7 +1,7 @@
 <h1>Chỉnh sửa bài viết</h1>
 
-<%= form_with model: [@user, @post], local: true do |form| %>
-  <% if @post.errors.any? %>
+<%= form_with url: user_post_path(@user, @post), method: :patch, local: true, data: { turbo: false } do %>
+  <% if defined?(@post) && @post&.errors&.any? %>
     <div style="color: red;">
       <p><%= pluralize(@post.errors.count, "lỗi") %> cần sửa:</p>
       <ul>
@@ -13,22 +13,22 @@
   <% end %>
 
   <div>
-    <%= form.label :title, "Tiêu đề" %><br>
-    <%= form.text_field :title, required: true %>
+    <%= label_tag :title, "Tiêu đề" %><br>
+    <%= text_field_tag :title, @post.title, required: true %>
   </div>
 
   <div>
-    <%= form.label :content, "Nội dung" %><br>
-    <%= form.text_area :content, rows: 8, required: true %>
+    <%= label_tag :content, "Nội dung" %><br>
+    <%= text_area_tag :content, @post.content, rows: 8, required: true %>
   </div>
 
   <div>
-    <%= form.label :visibility, "Trạng thái" %><br>
-    <%= form.select :visibility, options_for_select([["Công khai", 0], ["Riêng tư", 1]], @post.visibility) %>
+    <%= label_tag :visibility, "Trạng thái" %><br>
+    <%= select_tag :visibility, options_for_select([["Công khai", 0], ["Riêng tư", 1]], @post.visibility) %>
   </div>
 
   <div style="margin-top: 10px;">
-    <%= form.submit "Cập nhật bài viết" %>
+    <%= submit_tag "Cập nhật bài viết" %>
     <%= link_to "Hủy", user_post_path(@user, @post) %>
   </div>
 <% end %>

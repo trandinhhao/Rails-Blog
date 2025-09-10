@@ -1,7 +1,7 @@
 <h1>Tạo bài viết mới</h1>
 
-<%= form_with model: [Current.user, @post], local: true, data: {turbo: false} do |form| %>
-  <% if @post.errors.any? %>
+<%= form_with url: user_posts_path(Current.user), method: :post, local: true, data: { turbo: false } do %>
+  <% if defined?(@post) && @post&.errors&.any? %>
     <div style="color: red">
       <h2><%= pluralize(@post.errors.count, "error") %> prohibited this post from being saved:</h2>
       <ul>
@@ -13,26 +13,23 @@
   <% end %>
 
   <div>
-    <%= form.label :title, "Tiêu đề:" %>
-    <%= form.text_field :title, required: true %>
+    <%= label_tag :title, "Tiêu đề:" %>
+    <%= text_field_tag :title, params[:title], required: true %>
   </div>
 
   <div>
-    <%= form.label :content, "Nội dung:" %>
-    <%= form.text_area :content, required: true, rows: 10, cols: 50 %>
+    <%= label_tag :content, "Nội dung:" %>
+    <%= text_area_tag :content, params[:content], required: true, rows: 10, cols: 50 %>
   </div>
 
   <div>
-    <%= form.label :visibility, "Trạng thái:" %>
-    <%= form.select :visibility,
-                    options_for_select([
-                                         ['Công khai', 0],
-                                         ['Riêng tư', 1]
-                                       ], @post.visibility) %>
+    <%= label_tag :visibility, "Trạng thái:" %>
+    <%= select_tag :visibility,
+                   options_for_select([['Công khai', 0], ['Riêng tư', 1]], params[:visibility]) %>
   </div>
 
   <div>
-    <%= form.submit "Tạo bài viết" %>
+    <%= submit_tag "Tạo bài viết" %>
   </div>
 <% end %>
 

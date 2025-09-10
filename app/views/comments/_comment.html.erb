@@ -5,7 +5,7 @@
   </p>
   <p><%= comment.content %></p>
   <p>
-    <%= link_to "Reply", new_user_post_comment_path(user, post, parent_id: comment.id) %>
+    <%= link_to "Reply", new_post_comment_path(post, parent_id: comment.id) %>
   </p>
 
   <% if comment.replies.any? %>

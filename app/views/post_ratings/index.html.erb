@@ -1,0 +1,18 @@
+<h1>Thống kê đánh giá</h1>
+
+<% stars = [1,2,3,4,5] %>
+<ul>
+  <% stars.each do |s| %>
+    <li><strong><%= s %> sao</strong>: <%= (@ratings_count || {})[s] || 0 %></li>
+  <% end %>
+</ul>
+
+<% if @check %>
+  <p>Bạn đã đánh giá rồi</p>
+<% else %>
+  <%= link_to "Rate", new_user_post_post_rating_path(Current.user, @post) %>
+<% end %>
+
+<div style="margin-top: 10px;">
+  <%= link_to "Quay lại", user_post_path(params[:user_id], @post) %>
+</div>

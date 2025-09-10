@@ -1,0 +1,39 @@
+<h1>Danh sách những post đã follow</h1>
+
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+  <tr>
+    <th>Post ID</th>
+    <th>Title</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <% if (@posts || []).any? %>
+    <% @posts.each do |post| %>
+      <% pf = post.post_follows.find_by(user_id: @user.id) %>
+      <tr>
+        <td><%= post.id %></td>
+        <td><%= post.title %></td>
+        <td><%= link_to "Xem", user_post_path(@user, post) %></td>
+        <td>
+          <% if pf %>
+            <%= link_to "Hủy follow",
+                        user_post_post_follow_path(@user, post, pf),
+                        data: { turbo_method: :delete, turbo_confirm: "Bạn chắc chắn hủy theo dõi?" } %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  <% else %>
+    <tr>
+      <td colspan="4">Chưa theo dõi bài viết nào.</td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<div style="margin-top: 10px;">
+  <%= link_to "Quay lại", root_path %>
+</div>

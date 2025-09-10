@@ -1,0 +1,14 @@
+<h1>Tạo đánh giá</h1>
+
+<%= form_with url: user_post_post_ratings_path(Current.user, params[:post_id]),
+              method: :post, local: true, data: { turbo: false } do %>
+  <div>
+    <label for="star">Chọn số sao</label>
+    <%= select_tag :star, options_for_select([[1,1],[2,2],[3,3],[4,4],[5,5]]), required: true %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= submit_tag "Gửi đánh giá" %>
+    <%= link_to "Hủy", user_post_post_ratings_path(params[:user_id], params[:post_id]) %>
+  </div>
+<% end %>

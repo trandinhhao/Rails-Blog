@@ -1,4 +1,4 @@
-<h1><%= @post.title %></h1>
+<h1>Title: <%= @post.title %></h1>
 <p>
   By: <%= @user.email_address %> |
   <%= time_ago_in_words(@post.created_at) %> trước |
@@ -6,9 +6,9 @@
   <%= @post.visibility == 0 ? "Công khai" : "Riêng tư" %>
 </p>
 
-<div>
-  <h3>Nội dung</h3>
-  <div>
+<div style="border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px; margin: 20px 0; background-color: #fafafa; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+  <h3 style="margin-top: 0; color: #333; border-bottom: 1px solid #e0e0e0; padding-bottom: 10px;">Nội dung</h3>
+  <div style="line-height: 1.6; color: #444; font-size: 16px;">
     <%= simple_format(@post.content) %>
   </div>
 </div>
@@ -18,7 +18,15 @@
 
 <hr>
 
-<%= link_to "Bình luận", user_post_comments_path(@user, @post) %>
+<%= link_to "Bình luận", post_comments_path(@post) %>
+
+<hr>
+
+<%= link_to "Rating", user_post_post_ratings_path(@user, @post) %>
+
+<hr>
+
+<%= button_to "Theo dõi bài viết", user_post_post_follows_path(Current.user, @post), method: :post %>
 
 <p>
   <%= link_to "Quay lại danh sách", user_posts_path(@user) %>
